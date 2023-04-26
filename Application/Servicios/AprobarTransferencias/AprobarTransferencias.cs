@@ -41,31 +41,26 @@ namespace Application.Servicios.AprobarTransferencias
                 await _logs.SaveHeaderLogs(req_aprobar_transf, operacion, MethodBase.GetCurrentMethod()!.Name, GetType().Name);
 
                 // Consultar id del sistema para los parametros
-                int sistema_id;
+                string sistema_id;
                 string str_token = "";
                 req_get_id_sistema.str_nombre_sistema = "WSPROCESARSMS";
                 var res_sistema = await sisDat.GetIdSistema(req_get_id_sistema);
-                if (res_sistema.str_res_codigo == "000") sistema_id = Convert.ToInt32(res_sistema.str_id_sistema);
-                else sistema_id = 4; // Soporte
+                if (res_sistema.str_res_codigo == "000") sistema_id = res_sistema.str_id_sistema;
+                else sistema_id = "4"; // Soporte
 
                 // Generar el token para wsTransferencias
                 Header header = Funciones.ConstruirHeader(new Header
                 {
                     str_id_servicio = "APROBAR_TRANSFERENCIAS",
                     str_id_msj = "Aprobar transferencias que esten en estado REVISADO",
-                    str_id_sistema = sistema_id.ToString(),
+                    str_id_sistema = sistema_id,
                     str_mac_dispositivo = req_aprobar_transf.str_mac,
                     str_ip_dispositivo = req_aprobar_transf.str_ip,
                     str_login = "USR_SMS"
                 });
 
-                ReqGenerateToken rgt = Funciones.ConstruirReqGenerarToken(header);
-                var res_token = await _wsIdentity.GenerateToken(rgt);
-
-                if (res_token.str_res_codigo == "000") str_token = res_token.str_token;
-
                 // Consulta los parametros para determinar el horario y frecuencia de ejecución
-                req_tiempos_ejecucion.int_id_sistema = sistema_id;
+                req_tiempos_ejecucion.int_id_sistema = Convert.ToInt32(sistema_id);
                 req_tiempos_ejecucion.str_nemo_horario = req_aprobar_transf.str_horario_ejecucion;
                 req_tiempos_ejecucion.str_nemo_frecuencia_ejecucion = req_aprobar_transf.str_frecuencia_ejecucion;
 
@@ -75,7 +70,13 @@ namespace Application.Servicios.AprobarTransferencias
                 {
                     if (hora_actual >= response.tsp_hora_inicio && hora_actual <= response.tsp_hora_fin)
                     {
-                        Console.WriteLine($"Esta en Horas");
+                        Console.WriteLine($"Buscando transferencias por aprobar...");
+
+                        ReqGenerateToken rgt = Funciones.ConstruirReqGenerarToken(header);
+                        var res_token = await _wsIdentity.GenerateToken(rgt);
+
+                        if (res_token.str_res_codigo == "000") str_token = res_token.str_token;
+
                         ReqAprobTransfApi req = new ReqAprobTransfApi
                         {
                             consulta = header,
@@ -100,7 +101,10 @@ namespace Application.Servicios.AprobarTransferencias
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine("CODIGO: " + 500 + " MENSAJE: " + ex.Message);
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                Console.WriteLine($"Detalle error: {ex}", Console.ForegroundColor);
                 await _logs.SaveExecptionLogs(res_tran, operacion, MethodBase.GetCurrentMethod()!.Name, GetType().Name, ex);
             }
             await _logs.SaveResponseLogs(res_tran, operacion, MethodBase.GetCurrentMethod()!.Name, GetType().Name);

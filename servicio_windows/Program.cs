@@ -1,7 +1,5 @@
-﻿using System.Net;
-using servicio_windows;
+﻿using servicio_windows;
 using Application.Interfaz;
-using System.Net.NetworkInformation;
 using Application.Common.Interfaces;
 using static AccesoDatosGrpcAse.Neg.DAL;
 using Infraestructure.Common.Interfaces;
@@ -14,23 +12,23 @@ using Application.Servicios.Common.Sistemas.MegSistemas;
 
 namespace servicioWindows
 {
-    class AppServicioWindows
+    public static class AppServicioWindows
     {
+        private static ITransferenciasApi? wsProcTransf;
+        private static ILogs? logs;
         private static ISistemasApi? wsSistemas;
         private static IIdentityApi? wsIdentity;
-        private static ITransferenciasApi? wsProcTransf;
         private static ISistemasDat? wsSisDat;
-        private static ILogs? logs;
+        private static string str_servicio = "";
 
         private static string str_frecuencia_ejecucion = "";
         private static string str_horario_ejecucion = "";
-        private static string str_servicio = "";
         private static string str_ip = "";
         private static string str_mac = "";
 
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Servicio windows general");
+            Console.WriteLine(" ************ SERVICIO WINDOWS GENERAL ************");
 
             IConfiguration configuracion = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -54,6 +52,7 @@ namespace servicioWindows
             });
 
             Provider servProvider = new Provider(grpcService, conf);
+            Utils utils = new Utils();
 
             var serviceProvider = servProvider.ServiceProvider();
 
@@ -65,12 +64,12 @@ namespace servicioWindows
             serviceProvider.GetService<IWsSistemas>();
             serviceProvider.GetService<IWsIdentity>();
             serviceProvider.GetService<IHttpService>();
-            str_ip = getIp();
-            str_mac = GetMacAddress();
+            str_ip = utils.getIp();
+            str_mac = utils.GetMacAddress();
 
             string[] argss = new string[] { "IEAT", "FEAT", "APROBAR_TRANSFERENCIAS" };
 
-            var services_thread = new Thread(() => OnStart(argss));
+            var services_thread = new Thread(() => OnStart(args));
             services_thread.Start();
         }
 
@@ -92,7 +91,7 @@ namespace servicioWindows
                     switch (str_servicio)
                     {
                         case "APROBAR_TRANSFERENCIAS":
-                            Console.WriteLine("Servicio windows para aprobar transferencias");
+                            Console.WriteLine(">> Servicio windows para aprobar transferencias");
 
                             ReqAprobarTransf req = new ReqAprobarTransf
                             {
@@ -105,7 +104,8 @@ namespace servicioWindows
                             await logs!.SaveResponseLogs(respuesta, "APROBAR_TRANSFERENCIAS", "OnStart", "AppServicioWindows");
                             break;
                     }
-                } else
+                }
+                else
                 {
                     Console.WriteLine("Parámetro con el nombre del servicio web indefinido");
                 }
@@ -114,38 +114,6 @@ namespace servicioWindows
             {
                 Console.WriteLine(ex.ToString());
             }
-            string value = Console.ReadLine()!;
-        }
-
-        static string getIp()
-        {
-            try
-            {
-                string strHostName = Dns.GetHostName();
-                IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
-                IPAddress[] addr = ipEntry.AddressList;
-                return addr[addr.Length - 1].ToString();
-            }
-            catch (Exception)
-            {
-                return "";
-            }
-        }
-
-        static string GetMacAddress()
-        {
-            string macAddresses = string.Empty;
-
-            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
-            {
-                if (nic.OperationalStatus == OperationalStatus.Up)
-                {
-                    macAddresses += nic.GetPhysicalAddress().ToString();
-                    break;
-                }
-            }
-
-            return macAddresses;
         }
     }
 }

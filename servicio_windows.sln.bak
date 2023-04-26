@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "servicio_windows", "servicio_windows\servicio_windows.csproj", "{C4E5EC05-5074-46F5-87C9-57C5C531FE57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "servicio_windows", "win_Recomensas\servicio_windows.csproj", "{C4E5EC05-5074-46F5-87C9-57C5C531FE57}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{15ADEDFF-77B1-4C90-80BC-097883D14355}"
 EndProject
