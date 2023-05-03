@@ -108,9 +108,13 @@ namespace Infraestructure.Services
                     case "wsIdentity":
                         httpClient.DefaultRequestHeaders.Add(_config.wsIdentity_type_auth, _config.wsIdentity_auth);
                         break;
+
                     // Agregar nuevos servicios -- Hace referencia al nombre de cada servicio del appsettings
-                    case "APROBAR_TRANSFERENCIAS":
-                        httpClient.DefaultRequestHeaders.Add(_config.aprob_transf_type_auth, _config.aprob_transf_auth);
+                    case "wsTransferencias":
+                        httpClient.DefaultRequestHeaders.Add(_config.wsTransferencias_type_auth, _config.wsTransferencias_auth);
+                        break;
+                    case "wsProcesarSms":
+                        httpClient.DefaultRequestHeaders.Add(_config.wsProcesarSms_type_auth, _config.wsProcesarSms_auth);
                         break;
                 }
             }

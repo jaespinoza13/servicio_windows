@@ -5,40 +5,54 @@
         #region Settings
         public string Ruta_log { get; set; } = string.Empty;
         #endregion
+
         #region EndPoints
-        public string url_grpc_sybase { get; set; } = string.Empty;
         public string url_acceso_logs { get; set; } = string.Empty;
-        #region wsSistemas
-        public string sistemas_nombre { get; set; } = string.Empty;
-        public string sistemas_url { get; set; } = string.Empty;
-        public string sistemas_type_auth { get; set; } = string.Empty;
-        public string sistemas_auth { get; set; } = string.Empty;
-        public string sistemas_usuario { get; set; } = string.Empty;
-        public string sistemas_password { get; set; } = string.Empty;
-        public int sistemas_id { get; set; }
-        #endregion
-        #region wsIdentity
-        public string wsIdentity_nombre { get; set; } = string.Empty;
-        public string wsIdentity_url { get; set; } = string.Empty;
-        public string wsIdentity_type_auth { get; set; } = string.Empty;
-        public string wsIdentity_auth { get; set; } = string.Empty;
-        #endregion
         #endregion
 
-        #region Servicios
-
-        #region Aprobar transferencias
-        public string aprob_transf_nombre { get; set; } = string.Empty;
-        public string aprob_transf_recurso { get; set; } = string.Empty;
-        public string aprob_transf_type_auth { get; set; } = string.Empty;
-        public string aprob_transf_auth { get; set; } = string.Empty;
-        public string aprob_transf_usuario { get; set; } = string.Empty;
-        public string aprob_transf_password { get; set; } = string.Empty;
-        public int aprob_transf_frecuencia_ejecucion { get; set; }
-        public string aprob_transf_hora_inicio_ejecucion { get; set; } = string.Empty;
-        public string aprob_transf_hora_fin_ejecucion { get; set; } = string.Empty;
+        #region ServiciosGenerales
+            #region wsSistemasRest
+            public string sistemas_nombre { get; set; } = string.Empty;
+            public string sistemas_url { get; set; } = string.Empty;
+            public string sistemas_type_auth { get; set; } = string.Empty;
+            public string sistemas_auth { get; set; } = string.Empty;
+            public string sistemas_usuario { get; set; } = string.Empty;
+            public string sistemas_password { get; set; } = string.Empty;
+            public int sistemas_id { get; set; }
+            #endregion
+            #region wsIdentity
+            public string wsIdentity_nombre { get; set; } = string.Empty;
+            public string wsIdentity_url { get; set; } = string.Empty;
+            public string wsIdentity_type_auth { get; set; } = string.Empty;
+            public string wsIdentity_auth { get; set; } = string.Empty;
+            #endregion
         #endregion
 
+        #region ServiciosWin
+            #region WsTransferencias
+            public string wsTransferencias_nombre { get; set; } = string.Empty;
+            public string wsTransferencias_recurso { get; set; } = string.Empty;
+            public string wsTransferencias_type_auth { get; set; } = string.Empty;
+            public string wsTransferencias_auth { get; set; } = string.Empty;
+                #region AprobarTransferencias
+                public string aprob_transf_nombre { get; set; } = string.Empty;
+                public int aprob_transf_frecuencia_ejecucion { get; set; }
+                public string aprob_transf_hora_inicio_ejecucion { get; set; } = string.Empty;
+                public string aprob_transf_hora_fin_ejecucion { get; set; } = string.Empty;
+                #endregion
+            #endregion
+            #region WsProcesarSms
+            public string wsProcesarSms_nombre { get; set; } = string.Empty;
+            public string wsProcesarSms_recurso { get; set; } = string.Empty;
+            public string wsProcesarSms_type_auth { get; set; } = string.Empty;
+            public string wsProcesarSms_auth { get; set; } = string.Empty;
+                #region RechazarTransfBloquearCuenta
+                public string rechaz_bloquear_nombre { get; set; } = string.Empty;
+                public int rechaz_bloquear_frecuencia_ejecucion { get; set; }
+                public string rechaz_bloquear_hora_inicio_ejecucion { get; set; } = string.Empty;
+                public string rechaz_bloquear_hora_fin_ejecucion { get; set; } = string.Empty;
+                #endregion
+            #endregion
         #endregion
 
         #region Authorizations
@@ -47,7 +61,6 @@
 
         #region TypesAuthorization
         public string typeAuthAccesoLogs { get; set; } = string.Empty;
-        public string typeAuthWsRecompensas { get; set; } = string.Empty;
         #endregion
 
         #region GrpcSettings

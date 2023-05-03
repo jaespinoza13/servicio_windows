@@ -4,11 +4,12 @@ using Application.Common.Models;
 using Microsoft.Extensions.Options;
 using Application.Common.Interfaces;
 using Infraestructure.Common.Interfaces;
+using Application.Servicios.ProcesarSms;
 using Application.Servicios.AprobarTransferencias;
 
-namespace Infraestructure.InterfacesApi.Transferencias
+namespace Infraestructure.InterfacesApi.Sms
 {
-    public class TransferenciasApi : ITransferenciasApi
+    public class ProcesarSmsApi : IProcesarSmsApi
     {
         private readonly IHttpService _httpService;
         private readonly Configuracion _config;
@@ -16,36 +17,32 @@ namespace Infraestructure.InterfacesApi.Transferencias
         private readonly string _clase;
         private static SolicitarServicio _solicitarServicio = new SolicitarServicio();
 
-        public TransferenciasApi(IHttpService httpService, IOptionsMonitor<Configuracion> config, ILogs logs)
+        public ProcesarSmsApi(IHttpService httpService, IOptionsMonitor<Configuracion> config, ILogs logs)
         {
             _httpService = httpService;
             _logs = logs;
             _clase = GetType().Name;
             _config = config.CurrentValue;
-            _solicitarServicio.tipoAuth = _config.wsTransferencias_type_auth;
-            _solicitarServicio.authBasic = _config.wsTransferencias_auth;
-            _solicitarServicio.nombreServicio = _config.wsTransferencias_nombre;
+            _solicitarServicio.tipoAuth = _config.wsProcesarSms_type_auth;
+            _solicitarServicio.authBasic = _config.wsProcesarSms_auth;
+            _solicitarServicio.nombreServicio = _config.wsProcesarSms_nombre;
             _solicitarServicio.dcyHeadersAdicionales = new Dictionary<string, object>();
         }
 
-        public async Task<RespuestaTransaccion> AprobarTransferencias(ReqAprobTransfApi req_aprobar_transf)
+        public async Task<RespuestaTransaccion> ProcesSms(ReqProcesarSmsApi req_procesar_sms_api)
         {
-            string str_operacion = "LLAMAR_SERVICIO_WS_TRANSFERENCIAS";
-            await _logs.SaveHeaderLogs(req_aprobar_transf, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase);
+            var request = req_procesar_sms_api.header;
+            string str_operacion = "LLAMAR_SERVICIO_WS_PROCESAR_SMS";
+            await _logs.SaveHeaderLogs(request, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase);
             var respuesta = new RespuestaTransaccion();
             try
             {
                 _solicitarServicio.tipoMetodo = "POST";
-                _solicitarServicio.urlServicio = $"{_config.wsTransferencias_recurso}APROBAR_TRANSFERENCIAS";
-                _solicitarServicio.objSolicitud = req_aprobar_transf.consulta;
-                _solicitarServicio.dcyHeadersAdicionales = new Dictionary<string, object>
-                {
-                    { "Authorization", $"Bearer {req_aprobar_transf.str_token}" },
-                    { "int_estado", -1 }
-                };
+                _solicitarServicio.urlServicio = $"{_config.wsProcesarSms_recurso}PROCESAR_SMS";
+                _solicitarServicio.objSolicitud = request;
 
                 var str_res_servicio = await _httpService.solicitar_servicio(_solicitarServicio);
-                var response = JsonConvert.DeserializeObject<ResAprobarTransf>(str_res_servicio.ToString()!)!;
+                var response = JsonConvert.DeserializeObject<ResProcesarSms>(str_res_servicio.ToString()!)!;
 
                 respuesta.obj_cuerpo = response;
             }

@@ -3,6 +3,8 @@ using Infraestructure.Services;
 using Application.Common.Models;
 using Application.Common.Interfaces;
 using Infraestructure.Common.Interfaces;
+using Application.Servicios.ProcesarSms;
+using Infraestructure.InterfacesApi.Sms;
 using Microsoft.Extensions.Configuration;
 using Infraestructure.gRPC_Clients.Sybase;
 using Infraestructure.InterfacesApi.Common;
@@ -28,22 +30,36 @@ namespace servicio_windows
         {
             var serviceProvider = _grpcService.Configure<Configuracion>(_conf!.GetSection("Config:EndPoints"))
                   .Configure<Configuracion>(_conf.GetSection("Config:Settings"))
+
+                  .Configure<Configuracion>(_conf.GetSection("Config:ServiciosGenerales"))
+                  .Configure<Configuracion>(_conf.GetSection("Config:ServiciosGenerales:WsSistemasRest"))
+                  .Configure<Configuracion>(_conf.GetSection("Config:ServiciosGenerales:WsIdentity"))
+
+                  .Configure<Configuracion>(_conf.GetSection("Config:ServiciosWin"))
+                  .Configure<Configuracion>(_conf.GetSection("Config:ServiciosWin:WsTransferencias"))
+                  .Configure<Configuracion>(_conf.GetSection("Config:ServiciosWin:WsTransferencias:AprobarTransferencias"))
+                  .Configure<Configuracion>(_conf.GetSection("Config:ServiciosWin:WsProcesarSms"))
+                  .Configure<Configuracion>(_conf.GetSection("Config:ServiciosWin:WsProcesarSms:RechazarTransfBloquearCuenta"))
+
                   .Configure<Configuracion>(_conf.GetSection("Config:DataBases"))
-                  .Configure<Configuracion>(_conf.GetSection("Config:Servicios"))
                   .Configure<Configuracion>(_conf.GetSection("Config:Authorizations"))
                   .Configure<Configuracion>(_conf.GetSection("Config:TypeAuthorizations"))
                   .Configure<Configuracion>(_conf.GetSection("Config:GrpcSettings"))
                   .Configure<Configuracion>(_conf.GetSection("Config:ConfigMongodb"))
+
                   .AddSingleton<IHttpService, HttpService>()
-                  .AddSingleton<ITransferenciasApi, TransferenciasApi>()
-                  .AddSingleton<ISistemasApi, SistemasApi>()
-                  .AddSingleton<IIdentityApi, IdentityApi>()
-                  .AddSingleton<ISistemasDat, SistemasDat>()
-                  .AddSingleton<IWsSistemas, WsSistemas>()
-                  .AddSingleton<IWsIdentity, WsIdentity>()
-                  .AddSingleton<IAprobarTransferencias, AprobarTransferencias>()
-                  .AddSingleton<IMegSistemas, MegSistemas>()
                   .AddSingleton<ILogs, LogsServices>()
+                  .AddSingleton<ISistemasApi, SistemasApi>()
+                  .AddSingleton<ISistemasDat, SistemasDat>()
+                  .AddSingleton<IMegSistemas, MegSistemas>()
+                  .AddSingleton<IIdentityApi, IdentityApi>()
+                  .AddSingleton<IWsIdentity, WsIdentity>()
+
+                  .AddSingleton<IWsSistemas, WsSistemas>()
+                  .AddSingleton<ITransferenciasApi, TransferenciasApi>()
+                  .AddSingleton<IProcesarSmsApi, ProcesarSmsApi>()
+                  .AddSingleton<IAprobarTransferencias, AprobarTransferencias>()
+                  .AddSingleton<IProcesarSms, ProcesarSms>()
                   .BuildServiceProvider();
             return serviceProvider;
         }

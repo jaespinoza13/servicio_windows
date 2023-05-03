@@ -1,9 +1,10 @@
-﻿using Application.Servicios.AprobarTransferencias;
+﻿using Application.Common.Models;
+using Application.Servicios.AprobarTransferencias;
 
 namespace Application.Common.Interfaces.Servicios
 {
     public interface IAprobarTransferencias
     {
-        Task<ResAprobarTransf> AprobTransferencias(ReqAprobarTransf req_aprobar_transf);
+        Task<ResAprobarTransf> AprobTransferencias(ReqProcesarServicio req_aprobar_transf);
     }
 }
