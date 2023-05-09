@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Application.Common.Interfaces;
 using Infraestructure.Common.Interfaces;
 using Application.Servicios.ProcesarSms;
-using Application.Servicios.AprobarTransferencias;
 
 namespace Infraestructure.InterfacesApi.Sms
 {

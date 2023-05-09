@@ -67,7 +67,7 @@ namespace servicioWindows
             wsSistemas = serviceProvider.GetService<ISistemasApi>();
             wsIdentity = serviceProvider.GetService<IIdentityApi>();
 
-            //Servicios win
+            //Agregar aqui los nuevos servicios web
             wsProcTransf = serviceProvider.GetService<ITransferenciasApi>();
             wsProcSms = serviceProvider.GetService<IProcesarSmsApi>();
 
@@ -78,9 +78,9 @@ namespace servicioWindows
             str_ip = utils.getIp();
             str_mac = utils.GetMacAddress();
 
-            string[] argss = new string[] { "IEAT", "FEAT", "WSPROCESARSMS", "APROBAR_TRANSFERENCIAS" };
+            // string[] argss = new string[] { "IEAT", "FEAT", "WSPROCESARSMS", "APROBAR_TRANSFERENCIAS" };
 
-            var services_thread = new Thread(() => OnStart(argss));
+            var services_thread = new Thread(() => OnStart(args));
             services_thread.Start();
         }
 
@@ -92,9 +92,11 @@ namespace servicioWindows
                 WsIdentity identity = new WsIdentity(wsIdentity!, logs!);
                 MegSistemas sisDat = new MegSistemas(wsSisDat!, logs!);
 
+                //Lamar aca los servicios web
                 AprobarTransferencias transf = new AprobarTransferencias(wsProcTransf!, logs!, identity);
                 ProcesarSms proces = new ProcesarSms(wsProcSms!, logs!);
 
+                //Verificar los parametros que se enviaran desde pm2
                 if (args.Length > 0) str_horario_ejecucion = args[0];
                 if (args.Length > 1) str_frecuencia_ejecucion = args[1];
                 if (args.Length > 2) str_nombre_sistema = args[2];
