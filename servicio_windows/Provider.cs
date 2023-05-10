@@ -28,7 +28,7 @@ namespace servicio_windows
         }
         public ServiceProvider ServiceProvider()
         {
-            //Configuracion del appsettings
+            //Configuracion del appsettings. Tambien revisar que tenga la misma estructura en Application > Common > Models > Configuracion.cs
             var serviceProvider = _grpcService.Configure<Configuracion>(_conf!.GetSection("Config:EndPoints"))
                   .Configure<Configuracion>(_conf.GetSection("Config:Settings"))
 
@@ -57,7 +57,7 @@ namespace servicio_windows
                   .AddSingleton<IWsIdentity, WsIdentity>()
                   .AddSingleton<IWsSistemas, WsSistemas>()
 
-                  //Configuracion de los servicios web (api, servicio)
+                  //Configuracion de los servicios web (api, servicio). Agregar aca los servicios que se vayan a configurar
                   .AddSingleton<ITransferenciasApi, TransferenciasApi>()
                   .AddSingleton<IProcesarSmsApi, ProcesarSmsApi>()
                   .AddSingleton<IAprobarTransferencias, AprobarTransferencias>()

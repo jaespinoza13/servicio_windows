@@ -48,9 +48,11 @@ namespace Application.Servicios.ProcesarSms
                         ReqProcesarSmsApi req = new ReqProcesarSmsApi();
                         req.header = header;
 
+                        // Llama al servicio de procesar sms que s eencuentra en el wsProcesarSms
                         res_tran = await _sms.ProcesSms(req);
                         respuesta = (ResProcesarSms?)res_tran.obj_cuerpo;
 
+                        // Presenta en consola las acciones que va realizando
                         if (respuesta != null)
                         {
                             if (respuesta.sms_procesados != null && respuesta.sms_procesados!.Count > 0)
@@ -62,7 +64,7 @@ namespace Application.Servicios.ProcesarSms
                             }
                         }
                     }
-                    Thread.Sleep(req_procesar_sms.int_frecuencia_ejecucion * 60000);
+                    Thread.Sleep(req_procesar_sms.int_frecuencia_ejecucion * 60000); // Se ejecuta cada 2 minutos parametrizados
                 }
             }
             catch (Exception ex)

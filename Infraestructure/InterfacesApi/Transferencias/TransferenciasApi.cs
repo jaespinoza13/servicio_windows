@@ -41,7 +41,7 @@ namespace Infraestructure.InterfacesApi.Transferencias
                 _solicitarServicio.dcyHeadersAdicionales = new Dictionary<string, object>
                 {
                     { "Authorization", $"Bearer {req_aprobar_transf.str_token}" },
-                    { "int_estado", -1 }
+                    { "int_estado", -1 } // Se envia el token y un estado con valor -1 para la sesion de wsTransferencias
                 };
 
                 var str_res_servicio = await _httpService.solicitar_servicio(_solicitarServicio);

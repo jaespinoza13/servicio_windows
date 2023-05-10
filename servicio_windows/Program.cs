@@ -43,6 +43,7 @@ namespace servicioWindows
                 .Build();
 
             IConfiguration conf = configuracion!;
+            // Configuracion de GRPC para consultar SP´s
             var grpcService = new ServiceCollection();
             grpcService.AddGrpcClient<DALClient>(o =>
             {
@@ -78,7 +79,7 @@ namespace servicioWindows
             str_ip = utils.getIp();
             str_mac = utils.GetMacAddress();
 
-            // string[] argss = new string[] { "IEAT", "FEAT", "WSPROCESARSMS", "APROBAR_TRANSFERENCIAS" };
+            // TODO: para probar en local => string[] argss = new string[] { "IEAT", "FEAT", "WSPROCESARSMS", "APROBAR_TRANSFERENCIAS" };
 
             var services_thread = new Thread(() => OnStart(args));
             services_thread.Start();
@@ -130,6 +131,7 @@ namespace servicioWindows
                         int_frecuencia_ejecucion = response.int_frecuencia_ejecucion
                     };
 
+                    // Switch para derivar a los servicios solicitados de acuerdo a los parametros ingresados en pm2
                     switch (str_servicio)
                     {
                         case "APROBAR_TRANSFERENCIAS":
