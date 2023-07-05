@@ -35,7 +35,7 @@ namespace servicioWindows
 
         static async Task Main(string[] args)
         {
-            Console.WriteLine(" ************ SERVICIO WINDOWS GENERAL ************");
+            Console.WriteLine("************ SERVICIO WINDOWS GENERAL ************");
 
             IConfiguration configuracion = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -79,7 +79,7 @@ namespace servicioWindows
             str_ip = utils.getIp();
             str_mac = utils.GetMacAddress();
 
-            // TODO: para probar en local => string[] argss = new string[] { "IEAT", "FEAT", "WSPROCESARSMS", "APROBAR_TRANSFERENCIAS" };
+            // TODO: para probar en local => string[] args = new string[] { "IEAT", "FEAT", "WSPROCESARSMS", "APROBAR_TRANSFERENCIAS" };
 
             var services_thread = new Thread(() => OnStart(args));
             services_thread.Start();

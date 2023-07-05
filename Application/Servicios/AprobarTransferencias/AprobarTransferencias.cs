@@ -59,7 +59,7 @@ namespace Application.Servicios.AprobarTransferencias
                             consulta = header,
                             str_token = str_token
                         };
-                        // Llama ala servicio de aprobar transferencias que esta en el wsTransferencias
+                        // Llama al servicio de aprobar transferencias que esta en el wsTransferencias
                         res_tran = await _transf.AprobarTransferencias(req);
                         respuesta = (ResAprobarTransf?)res_tran.obj_cuerpo;
 
@@ -75,7 +75,7 @@ namespace Application.Servicios.AprobarTransferencias
                             }
                         }
                     }
-                    Thread.Sleep(req_aprobar_transf.int_frecuencia_ejecucion * 60000); // Se ejecuta cada dos minutos parametrizados
+                    Thread.Sleep(req_aprobar_transf.int_frecuencia_ejecucion * 60000); 
                 }
             }
             catch (Exception ex)
