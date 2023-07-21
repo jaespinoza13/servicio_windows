@@ -4,6 +4,6 @@ namespace Application.Servicios.ProcesarSms
 {
     public class ReqProcesarSmsApi
     {
-        public Header header { get; set; }
+        public Header? header { get; set; }
     }
 }

@@ -37,7 +37,6 @@
             str_sesion = requerimiento.str_sesion;
             str_id_perfil = requerimiento.str_id_perfil;
             str_id_oficina = requerimiento.str_id_oficina;
-            //str_ente = requerimiento.str_ente;
             requerimiento.str_id_transaccion = str_id_transaccion;
             str_res_original_id_msj = requerimiento.str_id_msj;
             str_res_original_id_servicio = requerimiento.str_id_servicio!;

@@ -54,26 +54,13 @@ namespace Application.Servicios.AprobarTransferencias
                         var res_token = await _wsIdentity.GenerateToken(rgt);
                         if (res_token.str_res_codigo == "000") str_token = res_token.str_token;
 
-                        ReqAprobTransfApi req = new ReqAprobTransfApi
-                        {
-                            consulta = header,
-                            str_token = str_token
-                        };
+                        ReqAprobTransfApi req = req_transf(str_token, header);
                         // Llama al servicio de aprobar transferencias que esta en el wsTransferencias
                         res_tran = await _transf.AprobarTransferencias(req);
                         respuesta = (ResAprobarTransf?)res_tran.obj_cuerpo;
 
                         // Presenta en los logs las acciones que va realizando
-                        if (respuesta != null)
-                        {
-                            if (respuesta.transf_procesada != null && respuesta.transf_procesada!.Count > 0)
-                            {
-                                foreach (var item in respuesta.transf_procesada!)
-                                {
-                                    Console.WriteLine("CODIGO: " + item.codigo + " MENSAJE: " + item.mensaje);
-                                }
-                            }
-                        }
+                        recorrer_transf(respuesta);
                     }
                     Thread.Sleep(req_aprobar_transf.int_frecuencia_ejecucion * 60000); 
                 }
@@ -88,6 +75,29 @@ namespace Application.Servicios.AprobarTransferencias
             }
             await _logs.SaveResponseLogs(res_tran, operacion, MethodBase.GetCurrentMethod()!.Name, GetType().Name);
             return respuesta!;
+        }
+
+        private static ReqAprobTransfApi req_transf(string str_token, Header header)
+        {
+            return new ReqAprobTransfApi
+            {
+                consulta = header,
+                str_token = str_token
+            };
+        }
+
+        private static void recorrer_transf(ResAprobarTransf? respuesta)
+        {
+            if (respuesta != null)
+            {
+                if (respuesta.transf_procesada != null && respuesta.transf_procesada!.Count > 0)
+                {
+                    foreach (var item in respuesta.transf_procesada!)
+                    {
+                        Console.WriteLine("CODIGO: " + item.codigo + " MENSAJE: " + item.mensaje);
+                    }
+                }
+            }
         }
     }
 }
