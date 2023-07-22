@@ -32,26 +32,34 @@ namespace Infraestructure.InterfacesApi.Sms
         {
             var request = req_procesar_sms_api.header;
             string str_operacion = "LLAMAR_SERVICIO_WS_PROCESAR_SMS";
-            await _logs.SaveHeaderLogs(request, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase);
             var respuesta = new RespuestaTransaccion();
-            try
+            if (request != null)
             {
-                _solicitarServicio.tipoMetodo = "POST";
-                _solicitarServicio.urlServicio = $"{_config.wsProcesarSms_recurso}PROCESAR_SMS";
-                _solicitarServicio.objSolicitud = request;
+                await _logs.SaveHeaderLogs(request, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase);
+                
+                try
+                {
+                    _solicitarServicio.tipoMetodo = "POST";
+                    _solicitarServicio.urlServicio = $"{_config.wsProcesarSms_recurso}PROCESAR_SMS";
+                    _solicitarServicio.objSolicitud = request;
 
-                var str_res_servicio = await _httpService.solicitar_servicio(_solicitarServicio);
-                var response = JsonConvert.DeserializeObject<ResProcesarSms>(str_res_servicio.ToString()!)!;
-
-                respuesta.obj_cuerpo = response;
-            }
-            catch (TaskCanceledException ex)
+                    var str_res_servicio = await _httpService.solicitar_servicio(_solicitarServicio);
+                    var response = JsonConvert.DeserializeObject<ResProcesarSms>(str_res_servicio.ToString()!)!;
+                    respuesta.obj_cuerpo = response;
+                }
+                catch (TaskCanceledException ex)
+                {
+                    await _logs.SaveExecptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase, ex);
+                    throw new Exception(ex.Message);
+                }
+                await _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase);
+                return respuesta;
+            }else
             {
-                await _logs.SaveExecptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase, ex);
-                throw new Exception(ex.Message);
+
+                return respuesta;
             }
-            await _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase);
-            return respuesta;
+            
         }
     }
 }

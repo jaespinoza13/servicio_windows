@@ -35,19 +35,27 @@ namespace Infraestructure.InterfacesApi.Transferencias
             var respuesta = new RespuestaTransaccion();
             try
             {
-                _solicitarServicio.tipoMetodo = "POST";
-                _solicitarServicio.urlServicio = $"{_config.wsTransferencias_recurso}APROBAR_TRANSFERENCIAS";
-                _solicitarServicio.objSolicitud = req_aprobar_transf.consulta;
-                _solicitarServicio.dcyHeadersAdicionales = new Dictionary<string, object>
+                if (req_aprobar_transf.consulta != null) //JESPINOZA
                 {
-                    { "Authorization", $"Bearer {req_aprobar_transf.str_token}" },
-                    { "int_estado", -1 } // Se envia el token y un estado con valor -1 para la sesion de wsTransferencias
-                };
+                     _solicitarServicio.objSolicitud = req_aprobar_transf.consulta;
+                     _solicitarServicio.tipoMetodo = "POST";
+                     _solicitarServicio.urlServicio = $"{_config.wsTransferencias_recurso}APROBAR_TRANSFERENCIAS";
+                     _solicitarServicio.dcyHeadersAdicionales = new Dictionary<string, object>
+                     {
+                        { "Authorization", $"Bearer {req_aprobar_transf.str_token}" },
+                        { "int_estado", -1 } // Se envia el token y un estado con valor -1 para la sesion de wsTransferencias
+                     };
 
-                var str_res_servicio = await _httpService.solicitar_servicio(_solicitarServicio);
-                var response = JsonConvert.DeserializeObject<ResAprobarTransf>(str_res_servicio.ToString()!)!;
+                     var str_res_servicio = await _httpService.solicitar_servicio(_solicitarServicio);
+                     var response = JsonConvert.DeserializeObject<ResAprobarTransf>(str_res_servicio.ToString()!)!;
+                     respuesta.obj_cuerpo = response;
 
-                respuesta.obj_cuerpo = response;
+                }
+                else
+                {
+                    return respuesta;
+                }
+                
             }
             catch (TaskCanceledException ex)
             {

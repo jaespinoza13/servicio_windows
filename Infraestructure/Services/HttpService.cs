@@ -66,7 +66,7 @@ namespace Infraestructure.Services
             return respuesta;
         }
 
-        private HttpRequestMessage createRequest(SolicitarServicio solicitarServicio)
+        private static HttpRequestMessage createRequest(SolicitarServicio solicitarServicio)
         {
             string str_solicitud = JsonSerializer.Serialize(solicitarServicio.objSolicitud);
 
@@ -85,7 +85,7 @@ namespace Infraestructure.Services
             return request;
         }
 
-        private void addHeadersLogs(SolicitarServicio solicitarServicio, HttpClient httpClient)
+        private static void addHeadersLogs(SolicitarServicio solicitarServicio, HttpClient httpClient)
         {
             if (solicitarServicio.authBasic != null)
                 httpClient.DefaultRequestHeaders.Add(solicitarServicio.tipoAuth, solicitarServicio.authBasic);
