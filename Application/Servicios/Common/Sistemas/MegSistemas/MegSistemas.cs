@@ -36,7 +36,7 @@ namespace Application.Servicios.Common.Sistemas.MegSistemas
             catch (TaskCanceledException ex)
             {
                 await _logs.SaveExecptionLogs(response, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase, ex);
-                throw new Exception(ex.Message);
+                throw new ArgumentNullException(ex.Message);
             }
         }
     }

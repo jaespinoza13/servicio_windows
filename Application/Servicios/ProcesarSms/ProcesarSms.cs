@@ -27,17 +27,7 @@ namespace Application.Servicios.ProcesarSms
 
             try
             {
-                await _logs.SaveHeaderLogs(req_procesar_sms, operacion, MethodBase.GetCurrentMethod()!.Name, GetType().Name);
-
-                Header header = Funciones.ConstruirHeader(new Header
-                {
-                    str_id_servicio = "PROCESAR_SMS",
-                    str_id_msj = "Rechazar tranferencias y bloquear cuentas contra retiro mediante SMS",
-                    str_id_sistema = req_procesar_sms.int_sistema.ToString(),
-                    str_mac_dispositivo = req_procesar_sms.str_mac,
-                    str_ip_dispositivo = req_procesar_sms.str_ip,
-                    str_login = "USR_SMS"
-                });
+                Header header = await create_header(req_procesar_sms, operacion);
 
                 while (_ejecutando)
                 {
@@ -53,16 +43,15 @@ namespace Application.Servicios.ProcesarSms
                         respuesta = (ResProcesarSms?)res_tran.obj_cuerpo;
 
                         // Presenta en consola las acciones que va realizando
-                        if (respuesta != null)
+                       
+                        if (respuesta != null && respuesta.sms_procesados != null && respuesta.sms_procesados!.Count > 0)
                         {
-                            if (respuesta.sms_procesados != null && respuesta.sms_procesados!.Count > 0)
+                            foreach (var item in respuesta.sms_procesados!)
                             {
-                                foreach (var item in respuesta.sms_procesados!)
-                                {
-                                    Console.WriteLine("CODIGO: " + item.codigo + " MENSAJE: " + item.mensaje);
-                                }
+                                Console.WriteLine("CODIGO: " + item.codigo + " MENSAJE: " + item.mensaje);
                             }
                         }
+                        
                     }
                     Thread.Sleep(req_procesar_sms.int_frecuencia_ejecucion * 60000); // Se ejecuta cada 2 minutos parametrizados
                 }
@@ -77,6 +66,22 @@ namespace Application.Servicios.ProcesarSms
             }
             await _logs.SaveResponseLogs(res_tran, operacion, MethodBase.GetCurrentMethod()!.Name, GetType().Name);
             return respuesta!;
+        }
+
+        private async Task<Header> create_header(ReqProcesarServicio req_procesar_sms, string operacion)
+        {
+            await _logs.SaveHeaderLogs(req_procesar_sms, operacion, MethodBase.GetCurrentMethod()!.Name, GetType().Name);
+
+            Header header = Funciones.ConstruirHeader(new Header
+            {
+                str_id_servicio = "PROCESAR_SMS",
+                str_id_msj = "Rechazar tranferencias y bloquear cuentas contra retiro mediante SMS",
+                str_id_sistema = req_procesar_sms.int_sistema.ToString(),
+                str_mac_dispositivo = req_procesar_sms.str_mac,
+                str_ip_dispositivo = req_procesar_sms.str_ip,
+                str_login = "USR_SMS"
+            });
+            return header;
         }
     }
 }

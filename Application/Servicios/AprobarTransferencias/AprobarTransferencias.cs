@@ -88,16 +88,13 @@ namespace Application.Servicios.AprobarTransferencias
 
         private static void recorrer_transf(ResAprobarTransf? respuesta)
         {
-            if (respuesta != null)
+            if (respuesta != null && respuesta.transf_procesada != null && respuesta.transf_procesada!.Count > 0)
             {
-                if (respuesta.transf_procesada != null && respuesta.transf_procesada!.Count > 0)
+                foreach (var item in respuesta.transf_procesada!)
                 {
-                    foreach (var item in respuesta.transf_procesada!)
-                    {
-                        Console.WriteLine("CODIGO: " + item.codigo + " MENSAJE: " + item.mensaje);
-                    }
+                    Console.WriteLine("CODIGO: " + item.codigo + " MENSAJE: " + item.mensaje);
                 }
-            }
+            } 
         }
     }
 }
