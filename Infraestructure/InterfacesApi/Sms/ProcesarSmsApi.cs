@@ -50,7 +50,7 @@ namespace Infraestructure.InterfacesApi.Sms
                 catch (TaskCanceledException ex)
                 {
                     await _logs.SaveExecptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase, ex);
-                    throw new Exception(ex.Message);
+                    throw new ArgumentNullException(ex.Message);
                 }
                 await _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, _clase);
                 return respuesta;

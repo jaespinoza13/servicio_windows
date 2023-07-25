@@ -11,7 +11,7 @@ namespace Infraestructure.Services
         private readonly Configuracion _configuration;
         private readonly IHttpService _httpService;
         public Dictionary<string, object> _logs;
-        private SolicitarServicio solicitarServicio = new();
+        private readonly SolicitarServicio solicitarServicio = new();
 
         public LogsServices(IOptionsMonitor<Configuracion> options, IHttpService httpService)
         {

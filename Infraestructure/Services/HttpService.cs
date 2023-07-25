@@ -3,13 +3,14 @@ using System.Text.Json;
 using Application.Common.Models;
 using Microsoft.Extensions.Options;
 using Infraestructure.Common.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace Infraestructure.Services
 {
     public class HttpService : IHttpService
     {
         private readonly Configuracion _config;
-        private Dictionary<string, object> _logs;
+        private readonly Dictionary<string, object>  _logs;
         private const string strRutaLog = "winGeneral/";
 
         public HttpService(IOptionsMonitor<Configuracion> option)
@@ -62,7 +63,9 @@ namespace Infraestructure.Services
 
                 client.SendAsync(request);                
             }
-            catch { }
+            catch (TaskCanceledException ex) {
+                throw new ArgumentNullException(ex.Message);
+            }
             return respuesta;
         }
 
