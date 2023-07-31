@@ -79,10 +79,9 @@ namespace servicioWindows
             str_ip = utils.getIp();
             str_mac = utils.GetMacAddress();
 
-            // TODO:para probar en local =>
-            string[] args2 = new string[] { "IEAT", "FEAT", "WSPROCESARSMS", "PROCESAR_SMS" };
+            // TODO:para probar en local =>string[] args2 = new string[] { "IEAT", "FEAT", "WSPROCESARSMS", "PROCESAR_SMS" };
             await Task.Delay(5000);
-            var services_thread = new Thread(() => OnStart(args2));
+            var services_thread = new Thread(() => OnStart(args));
             services_thread.Start();
         }
 
